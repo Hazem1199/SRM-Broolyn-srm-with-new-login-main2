@@ -31,6 +31,7 @@ const ReservationDate = document.querySelector('.ReservationDate');
 const more = document.querySelector('.more');
 const emailcrd = document.querySelector('.email-crd');
 const moreBtn = document.querySelector('.more-btn');
+const invoiceBtn = document.querySelector(".invoiceBtn")
 
 
 // loading card
@@ -175,6 +176,13 @@ async function display(value) {
   });
   more.style.display = "inline";
   hide();
+
+  let invoiceUrl = `invoice.html?id=${value}`;
+  invoiceBtn.href = invoiceUrl;
+  let invoice = await fetch(invoiceUrl);
+  let invoiceData = await invoice.json();
+  sessionStorage.setItem('invoiceData', JSON.stringify(invoiceData));
+  window.open(invoiceUrl); // Open moduleUrl in a new window
 }
 
 moreBtn.addEventListener('click', () => {
