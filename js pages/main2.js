@@ -186,17 +186,27 @@ async function showInvoice(value) {
                 // Format the timestamp
                 const options = { year: 'numeric', month: 'short', day: 'numeric' };
                 const formattedTimestamp = new Date(studentInvoice.Timestamp).toLocaleDateString('en-US', options);
-
-
+        
                 timeCell.innerHTML = formattedTimestamp;
-
                 noteCell.innerHTML = studentInvoice.Notes;
                 AmountCell.innerHTML = studentInvoice.Amount;
                 serialCell.innerHTML = studentInvoice.autoSerial;
                 InvoiceTypeCell.innerHTML = studentInvoice.InvoiceType;
+        
+                // Add conditional statement to change background color
+                if (studentInvoice.autoSerial.includes("R")) {
+                    newRow.style.backgroundColor = "lightblue";
+                }
+
+                // if (studentInvoice.autoSerial.includes("i")) {
+                //     newRow.style.backgroundColor = "#8FBC8F";
+                // }
+        
                 tbodyInvoice.appendChild(newRow);
             }
         });
+        
+        
     } catch (error) {
         console.log(error);
     }
