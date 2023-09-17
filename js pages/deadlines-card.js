@@ -23,6 +23,24 @@ async function getInfoDeadlines() {
   return data;
 }
 
+async function getDeadlineCards() {
+  const url = `https://script.google.com/macros/s/AKfycbwqja3nFfJIBT0WFGthzn9PdnykwSVjAI3q3dVvtIdo4AbXrJdozLHabxfUkuwbVtZV3Q/exec`;
+  response1 = await fetch(url);
+  data1 = await response1.json();
+  // console.log(data[0].Name);
+  return data1;
+}
+
+
+const spinner3 = document.getElementById('spinner3');
+
+function loadOn3() {
+  spinner3.style.display = 'block';
+}
+
+function loadOff3() {
+  spinner3.style.display = 'none';
+}
 
 
 // Get the result from session storage
@@ -39,13 +57,41 @@ async function getInfoDeadlines() {
 
 
 
-  const savedResultDead = sessionStorage.getItem('studentsData');
-  if (savedResultDead) {
-    const sResult = JSON.parse(savedResultDead);
-    // Use the result to update the UI
-    showDeadlines(sResult.value);
-  }
+const savedResultDead = sessionStorage.getItem('studentsData');
+if (savedResultDead) {
+  const sResult = JSON.parse(savedResultDead);
+  // Use the result to update the UI
+  showDeadlines(sResult.value);
+}
 
+
+// dead function 
+async function displayDeadCard(value) {
+  loadOn3()
+  numDeadline.textContent = " ";
+  const cards = await getDeadlineCards(value);
+
+  cards.forEach(card => {
+    if (value == card.ID) {
+      let DeadInfo = { value: card.ID, paln: card.Schadule, payment: card.Payments, paper: card.Papers, request: card.Requests, complaint: card.Complaints };
+
+      // Save the data to session storage
+      sessionStorage.setItem("myDataDead", JSON.stringify(DeadInfo));
+      // Use the data to render the page
+
+      // deadLine
+      numDeadline.textContent = DeadInfo.payment;
+    }
+  });
+  loadOff3()
+  // deadline location 
+  let deadlineUrl = `Deadlines.html?id=${value}`;
+  seeMore3.href = deadlineUrl;
+  let deadline = await fetch(deadlineUrl);
+  let deadlineData = await deadline.json();
+  sessionStorage.setItem('deadlineData', JSON.stringify(deadlineData));
+  window.open(deadlineUrl); // Open deadlineUrl in a new window
+}
 
 
 
@@ -61,7 +107,7 @@ async function showDeadlines(value) {
     const footer3 = document.querySelector('.footer3');
     let filteredDeadlines = students.filter(student => student.ID == value);
     let deadlineCount = filteredDeadlines.length;
-    
+
     console.log(deadlineCount);
     const numberOfPaidDeadlines = filteredDeadlines.filter(student => student.Status === "paid").length;
     console.log(numberOfPaidDeadlines);
@@ -138,9 +184,9 @@ searchButton.addEventListener('click', () => {
 
 
 
-  //   const result = {
-  //     value : searchInput[0].value,
-  //     numDeadline: numDeadline.textContent,
-  //     footer3: footer3.textContent,
-  //     deadlineData: deadlineData
-  // };
+//   const result = {
+//     value : searchInput[0].value,
+//     numDeadline: numDeadline.textContent,
+//     footer3: footer3.textContent,
+//     deadlineData: deadlineData
+// };

@@ -36,15 +36,15 @@ const invoiceBtn = document.querySelector(".invoiceBtn")
 
 // loading card
 
-const spinner3 = document.getElementById('spinner3');
+// const spinner3 = document.getElementById('spinner3');
 
-function loadOn3() {
-  spinner3.style.display = 'block';
-}
+// function loadOn3() {
+//   spinner3.style.display = 'block';
+// }
 
-function loadOff3() {
-  spinner3.style.display = 'none';
-}
+// function loadOff3() {
+//   spinner3.style.display = 'none';
+// }
 
 
 const spinner4 = document.getElementById('spinner4');
@@ -90,27 +90,27 @@ async function getData() {
   return data;
 }
 
-async function getAllCards() {
-  const url = `https://script.google.com/macros/s/AKfycbwqja3nFfJIBT0WFGthzn9PdnykwSVjAI3q3dVvtIdo4AbXrJdozLHabxfUkuwbVtZV3Q/exec`;
-  response1 = await fetch(url);
-  data1 = await response1.json();
-  // console.log(data[0].Name);
-  return data1;
-}
+// async function getAllCards() {
+//   const url = `https://script.google.com/macros/s/AKfycbwqja3nFfJIBT0WFGthzn9PdnykwSVjAI3q3dVvtIdo4AbXrJdozLHabxfUkuwbVtZV3Q/exec`;
+//   response1 = await fetch(url);
+//   data1 = await response1.json();
+//   // console.log(data[0].Name);
+//   return data1;
+// }
 
 // Get data from session storage if it exists
 const savedData = sessionStorage.getItem("myData");
 if (savedData) {
   const data = JSON.parse(savedData);
   // Use the data to render the page
-  // fName.innerHTML = data.Name;
-  // ID.innerHTML = data.ID;
-  // Email.innerHTML = data.Email.slice(0, 20);
-  // Phone.innerHTML = data.Phone;
-  // headName.innerHTML = data.Name.slice(0, 50);
-  // pic.src = data.img;
+  fName.innerHTML = data.Name;
+  ID.innerHTML = data.ID;
+  Email.innerHTML = data.Email.slice(0, 20);
+  Phone.innerHTML = data.Phone;
+  headName.innerHTML = data.Name.slice(0, 50);
+  pic.src = data.img;
   change();
-  display(data.ID);
+  // display(data.ID);
   hide()
 }
 const savedDataPlan = sessionStorage.getItem("myDataPlan");
@@ -118,7 +118,7 @@ if (savedDataPlan) {
   const data = JSON.parse(savedDataPlan);
   // Use the data to render the page
   change();
-  displayPlanCard(data.value)
+  // displayPlanCard(data.value)
   hide()
 }
 
@@ -127,7 +127,7 @@ if (savedDataDead) {
   const data = JSON.parse(savedDataDead);
   // Use the data to render the page
   change();
-  displayDeadCard(data.value)
+  // displayDeadCard(data.value)
   hide()
 }
 
@@ -192,62 +192,62 @@ moreBtn.addEventListener('click', () => {
 
 
 // plan function 
-async function displayPlanCard(value) {
-  loadOn4()
-  moduleCountElement.textContent = " ";
-  const cards = await getAllCards(value);
+// async function displayPlanCard(value) {
+//   loadOn4()
+//   moduleCountElement.textContent = " ";
+//   const cards = await getAllCards(value);
 
-  cards.forEach(card => {
-    if (value == card.ID) {
-      let planInfo = { value: card.ID, paln: card.Schadule, payment: card.Payments, paper: card.Papers, request: card.Requests, complaint: card.Complaints };
-      // Save the data to session storage
-      sessionStorage.setItem("myDataPlan", JSON.stringify(planInfo));
-      // Use the data to render the page
-      // traning plan 
-      moduleCountElement.textContent = planInfo.paln;
-    }
-  });
-  loadOff4()
+//   cards.forEach(card => {
+//     if (value == card.ID) {
+//       let planInfo = { value: card.ID, paln: card.Schadule, payment: card.Payments, paper: card.Papers, request: card.Requests, complaint: card.Complaints };
+//       // Save the data to session storage
+//       sessionStorage.setItem("myDataPlan", JSON.stringify(planInfo));
+//       // Use the data to render the page
+//       // traning plan 
+//       moduleCountElement.textContent = planInfo.paln;
+//     }
+//   });
+//   loadOff4()
 
-  // module location 
-  let moduleUrl = `Group.html?id=${value}`;
-  seeMore4.href = moduleUrl;
-  let module = await fetch(moduleUrl);
-  let moduleData = await module.json();
-  sessionStorage.setItem('moduleData', JSON.stringify(moduleData));
-  window.open(moduleUrl); // Open moduleUrl in a new window
+//   // module location 
+//   let moduleUrl = `Group.html?id=${value}`;
+//   seeMore4.href = moduleUrl;
+//   let module = await fetch(moduleUrl);
+//   let moduleData = await module.json();
+//   sessionStorage.setItem('moduleData', JSON.stringify(moduleData));
+//   window.open(moduleUrl); // Open moduleUrl in a new window
   
-}
+// }
 
 
 // dead function 
-async function displayDeadCard(value) {
-  loadOn3()
-  numDeadline.textContent = " ";
-  const cards = await getAllCards(value);
+// async function displayDeadCard(value) {
+//   loadOn3()
+//   numDeadline.textContent = " ";
+//   const cards = await getAllCards(value);
 
-  cards.forEach(card => {
-    if (value == card.ID) {
-      let DeadInfo = { value: card.ID, paln: card.Schadule, payment: card.Payments, paper: card.Papers, request: card.Requests, complaint: card.Complaints };
+//   cards.forEach(card => {
+//     if (value == card.ID) {
+//       let DeadInfo = { value: card.ID, paln: card.Schadule, payment: card.Payments, paper: card.Papers, request: card.Requests, complaint: card.Complaints };
 
-      // Save the data to session storage
-      sessionStorage.setItem("myDataDead", JSON.stringify(DeadInfo));
-      // Use the data to render the page
+//       // Save the data to session storage
+//       sessionStorage.setItem("myDataDead", JSON.stringify(DeadInfo));
+//       // Use the data to render the page
 
-      // deadLine
-      numDeadline.textContent = DeadInfo.payment;
-    }
-  });
-  loadOff3()
-  // deadline location 
-  let deadlineUrl = `Deadlines.html?id=${value}`;
-  seeMore3.href = deadlineUrl;
-  let deadline = await fetch(deadlineUrl);
-  let deadlineData = await deadline.json();
-  sessionStorage.setItem('deadlineData', JSON.stringify(deadlineData));
-  window.open(deadlineUrl); // Open deadlineUrl in a new window
+//       // deadLine
+//       numDeadline.textContent = DeadInfo.payment;
+//     }
+//   });
+//   loadOff3()
+//   // deadline location 
+//   let deadlineUrl = `Deadlines.html?id=${value}`;
+//   seeMore3.href = deadlineUrl;
+//   let deadline = await fetch(deadlineUrl);
+//   let deadlineData = await deadline.json();
+//   sessionStorage.setItem('deadlineData', JSON.stringify(deadlineData));
+//   window.open(deadlineUrl); // Open deadlineUrl in a new window
   
-}
+// }
 
 
 
@@ -311,10 +311,10 @@ window.onload = function () {
     menuBtnChange();
   });
 
-  searchBtn.addEventListener("click", function () {
-    sidebar.classList.toggle("open");
-    menuBtnChange();
-  });
+  // searchBtn.addEventListener("click", function () {
+  //   sidebar.classList.toggle("open");
+  //   menuBtnChange();
+  // });
 
   function menuBtnChange() {
     if (sidebar.classList.contains("open")) {
@@ -349,7 +349,7 @@ window.onload = function () {
 // console.log(info['access_token']);
 // console.log(info['expires_in']);
 
-console.log(user);
+// console.log(user);
 const welcome = document.querySelector('.Welcome');
 var user = localStorage.getItem("myUser");
 

@@ -79,14 +79,13 @@ function loadOff2() {
 }
 
 
-
 const numRequest = document.querySelector(".num-request");
 const savedDataReq = sessionStorage.getItem("myDataReq");
-if (savedDataReq) {
-  const data = JSON.parse(savedDataReq);
-  // Use the data to render the page
-  // numRequest.innerHTML = data.totalRequest;
-  showRequests(data.ID)
+if(savedDataReq){
+  const dataSto = JSON.parse(savedDataReq);
+  numRequest.innerHTML = dataSto.requestCount;
+ // console.log("dataStoID"+dataSto.ID);
+  // showRequests(data.ID)
 }
 
 
@@ -94,6 +93,8 @@ if (savedDataReq) {
 
 
 async function showRequests(id) {
+  console.log("showRequests:");
+
   numRequest.textContent = " ";
   loadOn2()
   const requests = await getInfoRequest(id);
@@ -119,14 +120,16 @@ async function showRequests(id) {
   }
   loadOff2()
   if (lastRequest) {
+    console.log("lastRequest:"+lastRequest);
     let req = {
-      ID : lastRequest.ID,
+      ID: lastRequest.ID,
       Message: lastRequest.Message,
       Date: lastRequest.Date,
-      totalRequest: filteredRequests.length,
+      cardFooter1: lastRequest.cardFooter1,
+      requestCount: filteredRequests.length,
     };
     // cardText1.textContent = req.Message;
-    sessionStorage.setItem("myDataReq", JSON.stringify(req));
+    sessionStorage.setItem("myDataReq2", JSON.stringify(req));
     let date = new Date(latestDate);
     let options = { year: "numeric", month: "short", day: "numeric" };
     let formattedDate = date.toLocaleDateString(undefined, options);
@@ -136,16 +139,49 @@ async function showRequests(id) {
     });
     cardFooter1.textContent =
       "last request : " + formattedDate + " at " + formattedTime;
-    let requestUrl = `Request.html?id=${id}`;
-    seeMore1.href = requestUrl;
-    let request = await fetch(requestUrl);
-    let requestData = await request.json();
-    localStorage.setItem("requestData", JSON.stringify(requestData));
-    window.open = requestUrl;
+    // let requestUrl = `Request.html?id=${id}`;
+    // seeMore1.href = requestUrl;
+    // let request = await fetch(requestUrl);
+    // let requestData = await request.json();
+    // localStorage.setItem("requestData", JSON.stringify(requestData));
+    // window.open = requestUrl;
   } else {
     // cardText1.textContent = "No request found with ID " + id;
   }
 }
+// get data from local storage
+
+
+
+
+
+async function openRequest(id) {
+  let requestUrl = `Request.html?id=${id}`;
+  seeMore1.href = requestUrl;
+  let request = await fetch(requestUrl);
+  let requestData = await request.json();
+  localStorage.setItem("requestData", JSON.stringify(requestData));
+  window.open = requestUrl;
+}
+
+
+seeMore1.addEventListener('click' , () => {
+  const id = searchInput[0].value;
+  if(id != null || id != ""){
+    console.log("ifid"+id);
+
+    openRequest(id);
+  }
+  // const savedDataReq = sessionStorage.getItem("myDataReq");
+  //   const data = JSON.parse(savedDataReq);
+  const savedDataReq2 = sessionStorage.getItem("myDataReq2");
+  const dataSto2 = JSON.parse(savedDataReq2);
+  if(dataSto2.ID !="" ){
+    numRequest.innerHTML = dataSto2.requestCount;
+  
+    openRequest(dataSto2.ID);
+  }
+} );
 
 searchButton.addEventListener("click", () => {
   const id = searchInput[0].value;
@@ -153,7 +189,7 @@ searchButton.addEventListener("click", () => {
     numRequest.textContent = 0;
     cardFooter1.textContent = "Can't Find any request";
   } else {
-  showRequests(id);
+    showRequests(id);
   }
   // showLastRequest(id);
 });
