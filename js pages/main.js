@@ -32,6 +32,13 @@ const more = document.querySelector('.more');
 const emailcrd = document.querySelector('.email-crd');
 const moreBtn = document.querySelector('.more-btn');
 const invoiceBtn = document.querySelector(".invoiceBtn")
+const Schadule = document.querySelector('.Schadule')
+const Payments = document.querySelector('.Payments')
+const Papers = document.querySelector('.Papers')
+const Requestss = document.querySelector('.Requestss')
+const Complaintss = document.querySelector('.Complaintss')
+
+
 
 
 // loading card
@@ -81,14 +88,24 @@ function hide() {
   loadingDiv.style.display = "none";
 }
 
-async function getData() {
-  console.log("start fetch data");
-  const url = `https://script.google.com/macros/s/AKfycbxbIh1P4jMmH5GDvpE44wHgu-g1JPUvvK10gGcOyBPdUi8fTt6kGDBuJ-3Eh6ydkuMX9A/exec`;
-  response = await fetch(url);
-  data = await response.json();
-  console.log("done fetch data");
+async function getData(id) {
+  const response = await fetch('https://script.google.com/macros/s/AKfycbwMh85x8w-RTNDx1lKyEE9LILv3sV3JojqFYquYeOgT2QLpsVX-TGVsswJLUsKnnuHelA/exec', {
+      method: 'POST',
+      body: JSON.stringify({ "id": id })
+  })
+  var data = await response.json();
+  console.log(data);
   return data;
 }
+
+// async function getData() {
+//   console.log("start fetch data");
+//   const url = `https://script.google.com/macros/s/AKfycbxbIh1P4jMmH5GDvpE44wHgu-g1JPUvvK10gGcOyBPdUi8fTt6kGDBuJ-3Eh6ydkuMX9A/exec`;
+//   response = await fetch(url);
+//   data = await response.json();
+//   console.log("done fetch data");
+//   return data;
+// }
 
 // async function getAllCards() {
 //   const url = `https://script.google.com/macros/s/AKfycbwqja3nFfJIBT0WFGthzn9PdnykwSVjAI3q3dVvtIdo4AbXrJdozLHabxfUkuwbVtZV3Q/exec`;
@@ -152,6 +169,11 @@ async function display(value) {
         Reserver: element.Reserver,
         CCAgent: element.CCAgent,
         ReservationDate: element.ReservationDate,
+        Schadule: element.Schadule,
+        Payments: element.Payments,
+        Papers: element.Papers,
+        Requestss: element.Requestss,
+        Complaintss: element.Complaintss,
       };
       // Save the data to session storage
       sessionStorage.setItem("myData", JSON.stringify(user));
@@ -172,6 +194,11 @@ async function display(value) {
       Reserver.innerHTML = user.Reserver;
       CCAgent.innerHTML = user.CCAgent;
       ReservationDate.innerHTML = user.ReservationDate.slice(0, 10);
+      Schadule.innerHTML = user.Schadule;
+      Payments.innerHTML = user.Payments;
+      Papers.innerHTML = user.Papers;
+      Requestss.innerHTML = user.Requestss;
+      Complaintss.innerHTML = user.Complaintss;
     }
   });
   more.style.display = "inline";
@@ -350,6 +377,7 @@ window.onload = function () {
 // console.log(info['expires_in']);
 
 // console.log(user);
+
 const welcome = document.querySelector('.Welcome');
 var user = localStorage.getItem("myUser");
 

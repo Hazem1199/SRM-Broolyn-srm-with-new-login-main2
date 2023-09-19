@@ -107,29 +107,31 @@ async function showRequests(id) {
   sessionStorage.setItem("myDataReq", JSON.stringify(requestCount));
   let lastRequest;
   let latestDate;
-  for (let i = requests.length - 1; i >= 0; i--) {
-    if (requests[i].ID == id) {
-      if (!lastRequest) {
-        lastRequest = requests[i];
-        latestDate = lastRequest.Date;
-      } else if (requests[i].Date > latestDate) {
-        lastRequest = requests[i];
-        latestDate = lastRequest.Date;
-      }
-    }
-  }
+  // for (let i = requests.length - 1; i >= 0; i--) {
+  //   if (requests[i].ID == id) {
+  //     if (!lastRequest) {
+  //       lastRequest = requests[i];
+  //       latestDate = lastRequest.Date;
+  //     } else if (requests[i].Date > latestDate) {
+  //       lastRequest = requests[i];
+  //       latestDate = lastRequest.Date;
+  //     }
+  //   }
+  // }
   loadOff2()
-  if (lastRequest) {
     console.log("lastRequest:"+lastRequest);
     let req = {
-      ID: lastRequest.ID,
-      Message: lastRequest.Message,
-      Date: lastRequest.Date,
-      cardFooter1: lastRequest.cardFooter1,
+      ID: searchInput[0].value,
+      // Message: lastRequest.Message,
+      // Date: lastRequest.Date,
+      // cardFooter1: lastRequest.cardFooter1,
       requestCount: filteredRequests.length,
     };
     // cardText1.textContent = req.Message;
-    sessionStorage.setItem("myDataReq2", JSON.stringify(req));
+    sessionStorage.setItem("myDataReq", JSON.stringify(req));
+    const savedDataReq3 = sessionStorage.getItem("myDataReq");
+const dataSto3 = JSON.parse(savedDataReq3);
+console.log("dataSto3.ID:" + dataSto3.ID);
     let date = new Date(latestDate);
     let options = { year: "numeric", month: "short", day: "numeric" };
     let formattedDate = date.toLocaleDateString(undefined, options);
@@ -145,9 +147,7 @@ async function showRequests(id) {
     // let requestData = await request.json();
     // localStorage.setItem("requestData", JSON.stringify(requestData));
     // window.open = requestUrl;
-  } else {
-    // cardText1.textContent = "No request found with ID " + id;
-  }
+  
 }
 // get data from local storage
 
@@ -174,14 +174,14 @@ seeMore1.addEventListener('click' , () => {
   }
   // const savedDataReq = sessionStorage.getItem("myDataReq");
   //   const data = JSON.parse(savedDataReq);
-  const savedDataReq2 = sessionStorage.getItem("myDataReq2");
+  const savedDataReq2 = sessionStorage.getItem("myDataReq");
   const dataSto2 = JSON.parse(savedDataReq2);
+  console.log("dataSto2.ID:" + dataSto2.ID);
   if(dataSto2.ID !="" ){
     numRequest.innerHTML = dataSto2.requestCount;
-  
     openRequest(dataSto2.ID);
   }
-} );
+});
 
 searchButton.addEventListener("click", () => {
   const id = searchInput[0].value;
