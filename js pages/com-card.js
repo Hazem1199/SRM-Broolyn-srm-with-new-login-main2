@@ -84,7 +84,7 @@ if (savedDatacom) {
   const data = JSON.parse(savedDatacom);
   // Use the data to render the page
   // numRequest.innerHTML = data.totalRequest;
-  showComplaint(data.ID);
+  // showComplaint(data.ID);
 }
 
 async function showComplaint(id) {
@@ -121,15 +121,15 @@ async function showComplaint(id) {
     sessionStorage.setItem("myDataCom", JSON.stringify(comp));
 
     // cardText2.textContent = comp.Message;
-    let date = new Date(latestDate);
-    let options = { year: "numeric", month: "short", day: "numeric" };
-    let formattedDate = date.toLocaleDateString(undefined, options);
-    let formattedTime = date.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "numeric",
-    });
-    cardFooter2.textContent =
-      "last complaint : " + formattedDate + " at " + formattedTime;
+    // let date = new Date(latestDate);
+    // let options = { year: "numeric", month: "short", day: "numeric" };
+    // let formattedDate = date.toLocaleDateString(undefined, options);
+    // let formattedTime = date.toLocaleTimeString(undefined, {
+    //   hour: "numeric",
+    //   minute: "numeric",
+    // });
+    // cardFooter2.textContent =
+    //   "last complaint : " + formattedDate + " at " + formattedTime;
       
     let complaintUrl = `Complaint.html?id=${id}`;
     seeMore2.href = complaintUrl;
@@ -149,7 +149,7 @@ searchButton.addEventListener("click", () => {
     numComplaint.textContent = 0;
     cardFooter2.textContent = "Can't Find any complaint";
   } else {
-    showComplaint(id);
+    // showComplaint(id);
   }
 });
 

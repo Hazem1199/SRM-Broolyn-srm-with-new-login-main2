@@ -80,13 +80,13 @@ function loadOff2() {
 
 
 const numRequest = document.querySelector(".num-request");
-const savedDataReq = sessionStorage.getItem("myDataReq");
-if(savedDataReq){
-  const dataSto = JSON.parse(savedDataReq);
-  numRequest.innerHTML = dataSto.requestCount;
- // console.log("dataStoID"+dataSto.ID);
-  // showRequests(data.ID)
-}
+// const savedDataReq = sessionStorage.getItem("myDataReq");
+// if (savedDataReq) {
+//   const dataSto = JSON.parse(savedDataReq);
+//   numRequest.innerHTML = dataSto.requestCount;
+//   // console.log("dataStoID"+dataSto.ID);
+//   // showRequests(data.ID)
+// }
 
 
 
@@ -103,10 +103,10 @@ async function showRequests(id) {
   let filteredRequests = requests.filter((request) => request.ID == id);
   let requestCount = filteredRequests.length;
   console.log(requestCount);
-  numRequest.textContent = requestCount;
+  // numRequest.textContent = requestCount;
   sessionStorage.setItem("myDataReq", JSON.stringify(requestCount));
   let lastRequest;
-  let latestDate;
+  // let latestDate;
   // for (let i = requests.length - 1; i >= 0; i--) {
   //   if (requests[i].ID == id) {
   //     if (!lastRequest) {
@@ -119,35 +119,35 @@ async function showRequests(id) {
   //   }
   // }
   loadOff2()
-    console.log("lastRequest:"+lastRequest);
-    let req = {
-      ID: searchInput[0].value,
-      // Message: lastRequest.Message,
-      // Date: lastRequest.Date,
-      // cardFooter1: lastRequest.cardFooter1,
-      requestCount: filteredRequests.length,
-    };
-    // cardText1.textContent = req.Message;
-    sessionStorage.setItem("myDataReq", JSON.stringify(req));
-    const savedDataReq3 = sessionStorage.getItem("myDataReq");
-const dataSto3 = JSON.parse(savedDataReq3);
-console.log("dataSto3.ID:" + dataSto3.ID);
-    let date = new Date(latestDate);
-    let options = { year: "numeric", month: "short", day: "numeric" };
-    let formattedDate = date.toLocaleDateString(undefined, options);
-    let formattedTime = date.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "numeric",
-    });
-    cardFooter1.textContent =
-      "last request : " + formattedDate + " at " + formattedTime;
-    // let requestUrl = `Request.html?id=${id}`;
-    // seeMore1.href = requestUrl;
-    // let request = await fetch(requestUrl);
-    // let requestData = await request.json();
-    // localStorage.setItem("requestData", JSON.stringify(requestData));
-    // window.open = requestUrl;
-  
+  console.log("lastRequest:" + lastRequest);
+  let req = {
+    ID: searchInput[0].value,
+    // Message: lastRequest.Message,
+    // Date: lastRequest.Date,
+    // cardFooter1: lastRequest.cardFooter1,
+    requestCount: filteredRequests.length,
+  };
+  // cardText1.textContent = req.Message;
+  sessionStorage.setItem("myDataReq", JSON.stringify(req));
+  const savedDataReq3 = sessionStorage.getItem("myDataReq");
+  const dataSto3 = JSON.parse(savedDataReq3);
+  console.log("dataSto3.ID:" + dataSto3.ID);
+  // let date = new Date(latestDate);
+  // let options = { year: "numeric", month: "short", day: "numeric" };
+  // let formattedDate = date.toLocaleDateString(undefined, options);
+  // let formattedTime = date.toLocaleTimeString(undefined, {
+  //   hour: "numeric",
+  //   minute: "numeric",
+  // });
+  // cardFooter1.textContent =
+  //   "last request : " + formattedDate + " at " + formattedTime;
+  // let requestUrl = `Request.html?id=${id}`;
+  // seeMore1.href = requestUrl;
+  // let request = await fetch(requestUrl);
+  // let requestData = await request.json();
+  // localStorage.setItem("requestData", JSON.stringify(requestData));
+  // window.open = requestUrl;
+
 }
 // get data from local storage
 
@@ -165,10 +165,10 @@ async function openRequest(id) {
 }
 
 
-seeMore1.addEventListener('click' , () => {
+seeMore1.addEventListener('click', () => {
   const id = searchInput[0].value;
-  if(id != null || id != ""){
-    console.log("ifid"+id);
+  if (id != null || id != "") {
+    console.log("ifid" + id);
 
     openRequest(id);
   }
@@ -177,8 +177,8 @@ seeMore1.addEventListener('click' , () => {
   const savedDataReq2 = sessionStorage.getItem("myDataReq");
   const dataSto2 = JSON.parse(savedDataReq2);
   console.log("dataSto2.ID:" + dataSto2.ID);
-  if(dataSto2.ID !="" ){
-    numRequest.innerHTML = dataSto2.requestCount;
+  if (dataSto2.ID != "") {
+    // numRequest.innerHTML = dataSto2.requestCount;
     openRequest(dataSto2.ID);
   }
 });

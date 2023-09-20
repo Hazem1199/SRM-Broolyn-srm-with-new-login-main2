@@ -63,7 +63,7 @@ function loadOn4() {
 function loadOff4() {
   spinner4.style.display = 'none';
 }
- //end
+//end
 
 
 var overlay = document.createElement("div");
@@ -89,9 +89,9 @@ function hide() {
 }
 
 async function getData(id) {
-  const response = await fetch('https://script.google.com/macros/s/AKfycbwMh85x8w-RTNDx1lKyEE9LILv3sV3JojqFYquYeOgT2QLpsVX-TGVsswJLUsKnnuHelA/exec', {
-      method: 'POST',
-      body: JSON.stringify({ "id": id })
+  const response = await fetch('https://script.google.com/macros/s/AKfycbxsp68tbWYiuiNG5-nLZRLFhTjHMBj4bRRjVEMG0vzeGKPkvunwT7InQfCfQm8d85huVg/exec', {
+    method: 'POST',
+    body: JSON.stringify({ "id": id })
   })
   var data = await response.json();
   console.log(data);
@@ -120,12 +120,28 @@ const savedData = sessionStorage.getItem("myData");
 if (savedData) {
   const data = JSON.parse(savedData);
   // Use the data to render the page
+
   fName.innerHTML = data.Name;
   ID.innerHTML = data.ID;
-  Email.innerHTML = data.Email.slice(0, 20);
+  let result = data.Email.indexOf(",");
+  Email.innerHTML = data.Email.slice(0, result);
+  emailcrd.innerHTML = data.Email;
   Phone.innerHTML = data.Phone;
   headName.innerHTML = data.Name.slice(0, 50);
   pic.src = data.img;
+  IdNumber.innerHTML = data.IdNumber;
+  DOB.innerHTML = data.DOB.slice(0, 10);
+  Grade.innerHTML = data.Grade;
+  Scholarship.innerHTML = data.Scholarship;
+  Receptionist.innerHTML = data.Receptionist;
+  Reserver.innerHTML = data.Reserver;
+  CCAgent.innerHTML = data.CCAgent;
+  ReservationDate.innerHTML = data.ReservationDate.slice(0, 10);
+  Schadule.innerHTML = data.Schadule;
+  Payments.innerHTML = data.Payments;
+  Papers.innerHTML = data.Papers;
+  Requestss.innerHTML = data.Requestss;
+  Complaintss.innerHTML = data.Complaintss;
   change();
   // display(data.ID);
   hide()
@@ -182,7 +198,7 @@ async function display(value) {
       ID.innerHTML = user.ID;
       let result = user.Email.indexOf(",");
       Email.innerHTML = user.Email.slice(0, result);
-      emailcrd.innerHTML=user.Email;
+      emailcrd.innerHTML = user.Email;
       Phone.innerHTML = user.Phone;
       headName.innerHTML = user.Name.slice(0, 50);
       pic.src = user.img;
@@ -243,7 +259,7 @@ moreBtn.addEventListener('click', () => {
 //   let moduleData = await module.json();
 //   sessionStorage.setItem('moduleData', JSON.stringify(moduleData));
 //   window.open(moduleUrl); // Open moduleUrl in a new window
-  
+
 // }
 
 
@@ -273,7 +289,7 @@ moreBtn.addEventListener('click', () => {
 //   let deadlineData = await deadline.json();
 //   sessionStorage.setItem('deadlineData', JSON.stringify(deadlineData));
 //   window.open(deadlineUrl); // Open deadlineUrl in a new window
-  
+
 // }
 
 
@@ -318,8 +334,8 @@ searchButton.addEventListener("click", (e) => {
   } else {
 
     display(value);
-    displayDeadCard(value);
-    displayPlanCard(value)
+    // displayDeadCard(value);
+    // displayPlanCard(value)
   }
 });
 

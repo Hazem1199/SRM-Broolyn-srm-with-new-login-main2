@@ -44,7 +44,7 @@ const savedResult = sessionStorage.getItem('paperResult');
 if (savedResult) {
   const result = JSON.parse(savedResult);
   // Use the result to update the UI
-  showPaper(result.id)
+  // showPaper(result.id)
 }
 
 
@@ -102,7 +102,7 @@ async function showPaper(id) {
 
 searchButton.addEventListener('click', async () => {
   const id = searchInput[0].value;
-  showPaper(id)
+  // showPaper(id)
 });
 
 
