@@ -57,52 +57,89 @@ if (savedResult) {
 
 async function showPaper(id) {
   document.querySelector('.num-Papers').textContent = " ";
-  loadOn()
+  // loadOn()
   const students = await getPaper(id);
   let filteredPapers = students.filter(student => student.ID == id);
+  let paperCount = filteredPapers.length;
 
-  let donePaperCount = 0;
-  let paperCount = 3; // initialize paperCount with the correct value
-  filteredPapers.forEach(student => {
-    if (filteredPapers) {
-      // increment donePaperCount for each paper completed by the student
-      if (student['Personal id'] == true) donePaperCount++;
-      if (student.Certificate == true) donePaperCount++;
-      if (student['HR Letter'] == true) donePaperCount++;
-      if (id.trim() === "" || isNaN(id) || id.charAt(0) !== "2") {
-        document.querySelector('.num-Papers').textContent = `0 / 0`;
-        footer5.textContent = `No paper(s) Found`;
-      } else {
-        document.querySelector('.num-Papers').textContent = `${donePaperCount} / ${paperCount}`;
-      }
-      console.log(donePaperCount);
-      const remainingPapers = [];
-      if (student['Personal id'] == false) remainingPapers.push('Personal id');
-      if (student.Certificate == false) remainingPapers.push('Certificate');
-      if (student['HR Letter'] == false) remainingPapers.push('HR Letter');
-      if (remainingPapers.length === 0) {
-        footer5.textContent = `No paper(s) remaining`;
-      } else {
-        const remainingPapersText = remainingPapers.join(' and ');
-        footer5.textContent = `${remainingPapersText} paper(s) remaining`;
-      }
-    }
-  });
+  sessionStorage.setItem("myDataPaper", JSON.stringify(paperCount));
 
-  loadOff()
+
+  let PaperInfo = { ID: searchInput[0].value, paperCount: filteredPapers.length };
+
+  // Save the data to session storage
+  sessionStorage.setItem("myDataPaper", JSON.stringify(PaperInfo));
+  const savedDataReq6 = sessionStorage.getItem("myDataPaper");
+  const dataSto6 = JSON.parse(savedDataReq6);
+  console.log("dataSto6.ID:" + dataSto6.ID);
+  // let donePaperCount = 0;
+  // let paperCount = 3; // initialize paperCount with the correct value
+  // filteredPapers.forEach(student => {
+  //   if (filteredPapers) {
+  //     // increment donePaperCount for each paper completed by the student
+  //     if (student['Personal id'] == true) donePaperCount++;
+  //     if (student.Certificate == true) donePaperCount++;
+  //     if (student['HR Letter'] == true) donePaperCount++;
+  //     if (id.trim() === "" || isNaN(id) || id.charAt(0) !== "2") {
+  //       document.querySelector('.num-Papers').textContent = `0 / 0`;
+  //       footer5.textContent = `No paper(s) Found`;
+  //     } else {
+  //       document.querySelector('.num-Papers').textContent = `${donePaperCount} / ${paperCount}`;
+  //     }
+  //     console.log(donePaperCount);
+  //     const remainingPapers = [];
+  //     if (student['Personal id'] == false) remainingPapers.push('Personal id');
+  //     if (student.Certificate == false) remainingPapers.push('Certificate');
+  //     if (student['HR Letter'] == false) remainingPapers.push('HR Letter');
+  //     if (remainingPapers.length === 0) {
+  //       footer5.textContent = `No paper(s) remaining`;
+  //     } else {
+  //       const remainingPapersText = remainingPapers.join(' and ');
+  //       // footer5.textContent = `${remainingPapersText} paper(s) remaining`;
+  //     }
+  //   }
+  // });
+
+  // loadOff()
 
   // Save the result in session storage
-  const result = { donePaperCount, paperCount, id };
-  sessionStorage.setItem('paperResult', JSON.stringify(result));
+  // const result = { donePaperCount, paperCount, id };
+  // sessionStorage.setItem('paperResult', JSON.stringify(result));
+}
+
+async function openPaper(id) {
+  let paperUrl = `paper.html?id=${id}`;
+  seeMore5.href = paperUrl;
+  let paper = await fetch(paperUrl);
+  let paperData = await paper.json();
+  localStorage.setItem('paperData', JSON.stringify(paperData));
+  window.open(paperUrl); // Open deadlineUrl in a new window
 }
 
 
+seeMore5.addEventListener('click', () => {
+  const id = searchInput[0].value;
+  if (id != null || id != "") {
+    console.log("ifid" + id);
+    openPaper(id);
+  }
+
+  // const savedDataReq = sessionStorage.getItem("myDataReq");
+  //   const data = JSON.parse(savedDataReq);
+  const savedDataReq2 = sessionStorage.getItem("myDataPaper");
+  const dataSto2 = JSON.parse(savedDataReq2);
+  console.log("dataSto2.ID:" + dataSto2.ID);
+  if (dataSto2.ID != "") {
+    // numRequest.innerHTML = dataSto2.requestCount;
+    openPaper(dataSto2.ID);
+  }
+});
 
 
 
 searchButton.addEventListener('click', async () => {
   const id = searchInput[0].value;
-  // showPaper(id)
+  showPaper(id)
 });
 
 

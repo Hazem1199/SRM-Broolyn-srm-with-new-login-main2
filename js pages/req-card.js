@@ -96,7 +96,7 @@ async function showRequests(id) {
   console.log("showRequests:");
 
   numRequest.textContent = " ";
-  loadOn2()
+  // loadOn2()
   const requests = await getInfoRequest(id);
   // let tableBody = document.querySelector('.divTableBody');
   // tableBody.innerHTML = '';
@@ -118,7 +118,7 @@ async function showRequests(id) {
   //     }
   //   }
   // }
-  loadOff2()
+  // loadOff2()
   console.log("lastRequest:" + lastRequest);
   let req = {
     ID: searchInput[0].value,
@@ -169,7 +169,6 @@ seeMore1.addEventListener('click', () => {
   const id = searchInput[0].value;
   if (id != null || id != "") {
     console.log("ifid" + id);
-
     openRequest(id);
   }
   // const savedDataReq = sessionStorage.getItem("myDataReq");

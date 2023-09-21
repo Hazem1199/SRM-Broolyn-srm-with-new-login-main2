@@ -89,7 +89,7 @@ if (savedDatacom) {
 
 async function showComplaint(id) {
   numComplaint.textContent = " ";
-  loadOn1()
+  // loadOn1()
   const complaints = await getInfoComplaint(id);
   // let tableBody = document.querySelector('.divTableBody');
   // tableBody.innerHTML = '';
@@ -98,25 +98,24 @@ async function showComplaint(id) {
   // console.log(requestCount);
   numComplaint.textContent = complaintCount;
   let lastComplaint;
-  let latestDate;
-  for (let i = complaints.length - 1; i >= 0; i--) {
-    if (complaints[i].ID == id) {
-      if (!lastComplaint) {
-        lastComplaint = complaints[i];
-        latestDate = lastComplaint.Date;
-      } else if (complaints[i].Date > latestDate) {
-        lastComplaint = complaints[i];
-        latestDate = lastComplaint.Date;
-      }
-    }
-  }
-  loadOff1()
-  if (lastComplaint) {
+  // let latestDate;
+  // for (let i = complaints.length - 1; i >= 0; i--) {
+  //   if (complaints[i].ID == id) {
+  //     if (!lastComplaint) {
+  //       lastComplaint = complaints[i];
+  //       latestDate = lastComplaint.Date;
+  //     } else if (complaints[i].Date > latestDate) {
+  //       lastComplaint = complaints[i];
+  //       latestDate = lastComplaint.Date;
+  //     }
+  //   }
+  // }
+  // loadOff1()
     let comp = {
-      ID: lastComplaint.ID,
-      Message: lastComplaint.Message,
-      Date: lastComplaint.Date,
-      totalComplaint: filteredComplaint.length,
+      ID: searchInput[0].value,
+      // Message: lastComplaint.Message,
+      // Date: lastComplaint.Date,
+      complaintCount: filteredComplaint.length,
     };
     sessionStorage.setItem("myDataCom", JSON.stringify(comp));
 
@@ -131,17 +130,35 @@ async function showComplaint(id) {
     // cardFooter2.textContent =
     //   "last complaint : " + formattedDate + " at " + formattedTime;
       
-    let complaintUrl = `Complaint.html?id=${id}`;
-    seeMore2.href = complaintUrl;
-    let complaint = await fetch(complaintUrl);
-    let complaintData = await complaint.json();
-    localStorage.setItem("complaintData", JSON.stringify(complaintData));
-    window.open = complaintUrl;
-  } else {
     // cardText2.textContent = "No request found with ID " + value;
-  }
   
 }
+
+async function openComplaint(id) {
+  let complaintUrl = `Complaint.html?id=${id}`;
+  seeMore2.href = complaintUrl;
+  let complaint = await fetch(complaintUrl);
+  let complaintData = await complaint.json();
+  localStorage.setItem("complaintData", JSON.stringify(complaintData));
+  window.open = complaintUrl;
+}
+
+seeMore2.addEventListener('click', () => {
+  const id = searchInput[0].value;
+  if (id != null || id != "") {
+    console.log("ifid" + id);
+    openRequest(id);
+  }
+  // const savedDataReq = sessionStorage.getItem("myDataReq");
+  //   const data = JSON.parse(savedDataReq);
+  const savedDataReq2 = sessionStorage.getItem("myDataCom");
+  const dataSto2 = JSON.parse(savedDataReq2);
+  console.log("dataSto2.ID:" + dataSto2.ID);
+  if (dataSto2.ID != "") {
+    // numRequest.innerHTML = dataSto2.requestCount;
+    openComplaint(dataSto2.ID);
+  }
+});
 
 searchButton.addEventListener("click", () => {
   const id = searchInput[0].value;
@@ -149,7 +166,7 @@ searchButton.addEventListener("click", () => {
     numComplaint.textContent = 0;
     cardFooter2.textContent = "Can't Find any complaint";
   } else {
-    // showComplaint(id);
+    showComplaint(id);
   }
 });
 

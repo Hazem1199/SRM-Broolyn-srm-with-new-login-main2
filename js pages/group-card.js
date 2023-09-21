@@ -30,90 +30,151 @@ const savedResultGroup = sessionStorage.getItem('groupResult');
 if (savedResultGroup) {
   const result = JSON.parse(savedResultGroup);
   // Use the result to update the UI
-  showGroup(result.id)
+  // showGroup(result.id)
 }
 
 
-async function showGroup(id) {
-  const students = await getInfoGroup(id);
-  const tableBody = document.querySelector('.tbody2');
 
-  // Remove all existing rows from the table
-  // while (tableBody.firstChild) {
-  //   tableBody.removeChild(tableBody.firstChild);
-  // }
+// plan function 
+async function displayPlanCard(id) {
+  // loadOn4()
+  moduleCountElement.textContent = " ";
+  const cards = await getInfoGroup(id);
+  let filteredPlans = cards.filter((plan) => plan.ID == id);
+  let planCount = filteredPlans.length;
 
-  // Create spinner element
-  // const spinner = document.createElement('div');
-  // spinner.classList.add('spinner');
-  // document.body.appendChild(spinner);
+  sessionStorage.setItem("myDataPlan", JSON.stringify(planCount));
 
-  let totalDoneModules = 0;
-  let moduleCount = 0;
-  let i;
 
-  for (let i = 1; i <= 12; i++) {
-    students.forEach(student => {
-      if (student[`g${i} module`]) {
-        const date = new Date(student[`g${i} date`]);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        const formattedDate = date.toLocaleDateString(undefined, options);
-        const newRow = document.createElement('tr');
-        const moduleCell = document.createElement('td');
-        const groupCell = document.createElement('td');
-        const dateCell = document.createElement('td');
-        newRow.appendChild(groupCell);
-        newRow.appendChild(moduleCell);
-        newRow.appendChild(dateCell);
-        moduleCell.textContent = student[`g${i} module`];
-        groupCell.textContent = student[`g${i}`];
-        dateCell.textContent = formattedDate;
-        if (tableBody) {
-          tableBody.appendChild(newRow);
-        } moduleCount++;
-        if (student[`g${i} grade`]) {
-          totalDoneModules++;
-        }
-      }
-    });
-  }
+  let planInfo = { ID: searchInput[0].value, planCount: filteredPlans.length };
 
-  
-  // Hide spinner element
-  // document.body.removeChild(spinner);
+  // Save the data to session storage
+  sessionStorage.setItem("myDataPlan", JSON.stringify(planInfo));
+  const savedDataReq5 = sessionStorage.getItem("myDataPlan");
+  const dataSto5 = JSON.parse(savedDataReq5);
+  console.log("dataSto5.ID:" + dataSto5.ID);
+  // Use the data to render the page
+  // traning plan 
+  // moduleCountElement.textContent = planInfo.paln;
 
-  // Update the module count
-  // const moduleCountElement = document.getElementById('moduleCount');
-  // moduleCountElement.textContent = `${totalDoneModules} / ${moduleCount}`;
 
-  // Update the footer based on the next module deadline
-  const filteredModules = students.filter(student => {
-    const date = new Date(student[`g${i} date`]);
-    return date >= new Date();
-  });
-  const nextModule = filteredModules.sort((a, b) => new Date(a[`g${i} date`]) - new Date(b[`g${i} date`]))[0];
-  if (nextModule) {
-    const formattedDueDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(nextModule[`g${i} date`]));
-    footer4.textContent = `Next Module: ${formattedDueDate}`;
-  } else {
-    footer4.textContent = 'No upcoming Module';
-  }
+  // loadOff4(
+
+  // module location 
+
+
+}
+
+async function openPlan(id) {
   let moduleUrl = `Group.html?id=${id}`;
   seeMore4.href = moduleUrl;
   let module = await fetch(moduleUrl);
   let moduleData = await module.json();
   localStorage.setItem('moduleData', JSON.stringify(moduleData));
-  window.open(moduleUrl);
-
-  // Save the result in session storage
-  const gResult = { totalDoneModules, moduleCount, value };
-  sessionStorage.setItem('groupResult', JSON.stringify(gResult));
-
+  window.open(moduleUrl); // Open moduleUrl in a new window
 }
+
+
+
+seeMore4.addEventListener('click', () => {
+  const id = searchInput[0].value;
+  if (id != null || id != "") {
+    console.log("ifid" + id);
+    openPlan(id);
+  }
+
+  // const savedDataReq = sessionStorage.getItem("myDataReq");
+  //   const data = JSON.parse(savedDataReq);
+  const savedDataReq2 = sessionStorage.getItem("myDataPlan");
+  const dataSto2 = JSON.parse(savedDataReq2);
+  console.log("dataSto2.ID:" + dataSto2.ID);
+  if (dataSto2.ID != "") {
+    // numRequest.innerHTML = dataSto2.requestCount;
+    openPlan(dataSto2.ID);
+  }
+});
+
+
+// async function showGroup(id) {
+//   const students = await getInfoGroup(id);
+//   const tableBody = document.querySelector('.tbody2');
+
+//   // Remove all existing rows from the table
+//   // while (tableBody.firstChild) {
+//   //   tableBody.removeChild(tableBody.firstChild);
+//   // }
+
+//   // Create spinner element
+//   // const spinner = document.createElement('div');
+//   // spinner.classList.add('spinner');
+//   // document.body.appendChild(spinner);
+
+//   let totalDoneModules = 0;
+//   let moduleCount = 0;
+//   let i;
+
+//   for (let i = 1; i <= 12; i++) {
+//     students.forEach(student => {
+//       if (student[`g${i} module`]) {
+//         const date = new Date(student[`g${i} date`]);
+//         const options = { year: 'numeric', month: 'short', day: 'numeric' };
+//         const formattedDate = date.toLocaleDateString(undefined, options);
+//         const newRow = document.createElement('tr');
+//         const moduleCell = document.createElement('td');
+//         const groupCell = document.createElement('td');
+//         const dateCell = document.createElement('td');
+//         newRow.appendChild(groupCell);
+//         newRow.appendChild(moduleCell);
+//         newRow.appendChild(dateCell);
+//         moduleCell.textContent = student[`g${i} module`];
+//         groupCell.textContent = student[`g${i}`];
+//         dateCell.textContent = formattedDate;
+//         if (tableBody) {
+//           tableBody.appendChild(newRow);
+//         } moduleCount++;
+//         if (student[`g${i} grade`]) {
+//           totalDoneModules++;
+//         }
+//       }
+//     });
+//   }
+
+
+//   // Hide spinner element
+//   // document.body.removeChild(spinner);
+
+//   // Update the module count
+//   // const moduleCountElement = document.getElementById('moduleCount');
+//   // moduleCountElement.textContent = `${totalDoneModules} / ${moduleCount}`;
+
+//   // Update the footer based on the next module deadline
+//   const filteredModules = students.filter(student => {
+//     const date = new Date(student[`g${i} date`]);
+//     return date >= new Date();
+//   });
+//   const nextModule = filteredModules.sort((a, b) => new Date(a[`g${i} date`]) - new Date(b[`g${i} date`]))[0];
+//   if (nextModule) {
+//     const formattedDueDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(nextModule[`g${i} date`]));
+//     footer4.textContent = `Next Module: ${formattedDueDate}`;
+//   } else {
+//     footer4.textContent = 'No upcoming Module';
+//   }
+//   let moduleUrl = `Group.html?id=${id}`;
+//   seeMore4.href = moduleUrl;
+//   let module = await fetch(moduleUrl);
+//   let moduleData = await module.json();
+//   localStorage.setItem('moduleData', JSON.stringify(moduleData));
+//   window.open(moduleUrl);
+
+//   // Save the result in session storage
+//   const gResult = { totalDoneModules, moduleCount, value };
+//   sessionStorage.setItem('groupResult', JSON.stringify(gResult));
+
+// }
 
 
 searchButton.addEventListener('click', () => {
   const id = searchInput[0].value;
-  showGroup(id);
+  displayPlanCard(id);
 });
 

@@ -23,13 +23,13 @@ async function getInfoDeadlines() {
   return data;
 }
 
-async function getDeadlineCards() {
-  const url = `https://script.google.com/macros/s/AKfycbwqja3nFfJIBT0WFGthzn9PdnykwSVjAI3q3dVvtIdo4AbXrJdozLHabxfUkuwbVtZV3Q/exec`;
-  response1 = await fetch(url);
-  data1 = await response1.json();
-  // console.log(data[0].Name);
-  return data1;
-}
+// async function getDeadlineCards() {
+//   const url = `https://script.google.com/macros/s/AKfycbwqja3nFfJIBT0WFGthzn9PdnykwSVjAI3q3dVvtIdo4AbXrJdozLHabxfUkuwbVtZV3Q/exec`;
+//   response = await fetch(url);
+//   data = await response.json();
+//   // console.log(data[0].Name);
+//   return data;
+// }
 
 
 const spinner3 = document.getElementById('spinner3');
@@ -61,111 +61,142 @@ const savedResultDead = sessionStorage.getItem('studentsData');
 if (savedResultDead) {
   const sResult = JSON.parse(savedResultDead);
   // Use the result to update the UI
-  showDeadlines(sResult.value);
+  // showDeadlines(sResult.value);
 }
 
 
 // dead function 
-async function displayDeadCard(value) {
-  loadOn3()
+async function displayDeadCard(id) {
+  // loadOn3()
   numDeadline.textContent = " ";
-  const cards = await getDeadlineCards(value);
+  const cards = await getInfoDeadlines(id);
+  let filteredRequests = cards.filter((deadline) => deadline.ID == id);
+  let deadlineCount = filteredRequests.length;
 
-  cards.forEach(card => {
-    if (value == card.ID) {
-      let DeadInfo = { value: card.ID, paln: card.Schadule, payment: card.Payments, paper: card.Papers, request: card.Requests, complaint: card.Complaints };
+  sessionStorage.setItem("myDataDead", JSON.stringify(deadlineCount));
 
-      // Save the data to session storage
-      sessionStorage.setItem("myDataDead", JSON.stringify(DeadInfo));
-      // Use the data to render the page
 
-      // deadLine
-      numDeadline.textContent = DeadInfo.payment;
-    }
-  });
-  loadOff3()
+
+
+  let DeadInfo = { ID: searchInput[0].value, deadlineCount: filteredRequests.length };
+
+  // Save the data to session storage
+  sessionStorage.setItem("myDataDead", JSON.stringify(DeadInfo));
+  const savedDataReq2 = sessionStorage.getItem("myDataDead");
+  const dataSto2 = JSON.parse(savedDataReq2);
+  console.log("dataSto2.ID:" + dataSto2.ID);
+  // Use the data to render the page
+
+  // deadLine
+  // numDeadline.textContent = DeadInfo.payment;
+
+
+  // loadOff3()
   // deadline location 
-  let deadlineUrl = `Deadlines.html?id=${value}`;
+
+}
+
+
+async function openDeadline(id) {
+  let deadlineUrl = `Deadlines.html?id=${id}`;
   seeMore3.href = deadlineUrl;
   let deadline = await fetch(deadlineUrl);
   let deadlineData = await deadline.json();
-  sessionStorage.setItem('deadlineData', JSON.stringify(deadlineData));
+  localStorage.setItem('deadlineData', JSON.stringify(deadlineData));
   window.open(deadlineUrl); // Open deadlineUrl in a new window
 }
 
 
-
-async function showDeadlines(value) {
-  try {
-    var students = await getInfoDeadlines(value);
-    // Store the data in sessionStorage
-    if (students.ID == value) {
-      const sResult = { value };
-      sessionStorage.setItem("studentsData", JSON.stringify(sResult));
-    }
-    // const numDeadline = document.querySelector('.num-deadline');
-    const footer3 = document.querySelector('.footer3');
-    let filteredDeadlines = students.filter(student => student.ID == value);
-    let deadlineCount = filteredDeadlines.length;
-
-    console.log(deadlineCount);
-    const numberOfPaidDeadlines = filteredDeadlines.filter(student => student.Status === "paid").length;
-    console.log(numberOfPaidDeadlines);
-    const deadlines = filteredDeadlines.sort((a, b) => new Date(a["Due Date"]) - new Date(b["Due Date"]));
-    const now = new Date();
-    const nextDeadline = deadlines.find(deadline => new Date(deadline["Due Date"]) > now);
-    if (numberOfPaidDeadlines === deadlineCount) {
-      // const numberOfUnpaidDeadlines = deadlineCount
-      // numDeadline.textContent = `${numberOfUnpaidDeadlines} / ${deadlineCount}`;
-      footer3.textContent = "No upcoming deadlines";
-    } else {
-      // numDeadline.textContent = `${numberOfPaidDeadlines} / ${deadlineCount}`;
-      const formattedDueDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(nextDeadline["Due Date"]));
-      footer3.textContent = `Next deadline: ${formattedDueDate}`;
-    }
-
-    let deadlineUrl = `Deadlines.html?id=${value}`;
-    seeMore3.href = deadlineUrl;
-    let deadline = await fetch(deadlineUrl);
-    let deadlineData = await deadline.json();
-    localStorage.setItem('deadlineData', JSON.stringify(deadlineData));
-    window.open = deadlineUrl;
-
-
-    students.forEach(element => {
-      if (value == element.ID) {
-        let student = { DueDate: element[`Due Date`], Amount: element.Amount, Status: element.Status, value: element.ID };
-        if (students.value === undefined) {
-          students.value = document.querySelector('input[name="id"]').value;
-        }
-        student.value = value;
-        console.log(student);
-        const newRow = document.createElement('tr');
-        const DueDateCell = document.createElement('td');
-        const AmountCell = document.createElement('td');
-        const StatusCell = document.createElement('td');
-        newRow.appendChild(DueDateCell);
-        newRow.appendChild(AmountCell);
-        newRow.appendChild(StatusCell);
-        DueDateCell.innerHTML = student.DueDate;
-        AmountCell.innerHTML = student.Amount;
-        const img = document.createElement('img');
-        if (student.Status === "paid") {
-          img.src = "./imgs/download.png";
-          img.alt = "paid";
-          img.style.width = "7%";
-        } else if (student.Status === "unpaid") {
-          img.src = "./imgs/png-transparent-computer-icons-ok-miscellaneous-trademark-cross.png";
-          img.alt = "unpaid";
-          img.style.width = "7%";
-        }
-        StatusCell.appendChild(img);
-      }
-    });
-  } catch (error) {
-    console.log(error);
+seeMore3.addEventListener('click', () => {
+  const id = searchInput[0].value;
+  if (id != null || id != "") {
+    console.log("ifid" + id);
+    openDeadline(id);
   }
-}
+
+  // const savedDataReq = sessionStorage.getItem("myDataReq");
+  //   const data = JSON.parse(savedDataReq);
+  const savedDataReq2 = sessionStorage.getItem("myDataDead");
+  const dataSto2 = JSON.parse(savedDataReq2);
+  console.log("dataSto2.ID:" + dataSto2.ID);
+  if (dataSto2.ID != "") {
+    // numRequest.innerHTML = dataSto2.requestCount;
+    openDeadline(dataSto2.ID);
+  }
+});
+
+
+// async function showDeadlines(value) {
+//   try {
+//     var students = await getInfoDeadlines(value);
+//     // Store the data in sessionStorage
+//     if (students.ID == value) {
+//       const sResult = { value };
+//       sessionStorage.setItem("studentsData", JSON.stringify(sResult));
+//     }
+//     // const numDeadline = document.querySelector('.num-deadline');
+//     // const footer3 = document.querySelector('.footer3');
+//     let filteredDeadlines = students.filter(student => student.ID == value);
+//     let deadlineCount = filteredDeadlines.length;
+
+//     console.log(deadlineCount);
+//     // const numberOfPaidDeadlines = filteredDeadlines.filter(student => student.Status === "paid").length;
+//     // console.log(numberOfPaidDeadlines);
+//     // const deadlines = filteredDeadlines.sort((a, b) => new Date(a["Due Date"]) - new Date(b["Due Date"]));
+//     // const now = new Date();
+//     // const nextDeadline = deadlines.find(deadline => new Date(deadline["Due Date"]) > now);
+//     // if (numberOfPaidDeadlines === deadlineCount) {
+//     //   // const numberOfUnpaidDeadlines = deadlineCount
+//     //   // numDeadline.textContent = `${numberOfUnpaidDeadlines} / ${deadlineCount}`;
+//     //   footer3.textContent = "No upcoming deadlines";
+//     // } else {
+//     //   // numDeadline.textContent = `${numberOfPaidDeadlines} / ${deadlineCount}`;
+//     //   const formattedDueDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(nextDeadline["Due Date"]));
+//     //   footer3.textContent = `Next deadline: ${formattedDueDate}`;
+//     // }
+
+//     // let deadlineUrl = `Deadlines.html?id=${value}`;
+//     // seeMore3.href = deadlineUrl;
+//     // let deadline = await fetch(deadlineUrl);
+//     // let deadlineData = await deadline.json();
+//     // localStorage.setItem('deadlineData', JSON.stringify(deadlineData));
+//     // window.open = deadlineUrl;
+
+
+//     students.forEach(element => {
+//       if (value == element.ID) {
+//         let student = { DueDate: element[`Due Date`], Amount: element.Amount, Status: element.Status, value: element.ID };
+//         if (students.value === undefined) {
+//           students.value = document.querySelector('input[name="id"]').value;
+//         }
+//         student.value = value;
+//         console.log(student);
+//         const newRow = document.createElement('tr');
+//         const DueDateCell = document.createElement('td');
+//         const AmountCell = document.createElement('td');
+//         const StatusCell = document.createElement('td');
+//         newRow.appendChild(DueDateCell);
+//         newRow.appendChild(AmountCell);
+//         newRow.appendChild(StatusCell);
+//         DueDateCell.innerHTML = student.DueDate;
+//         AmountCell.innerHTML = student.Amount;
+//         const img = document.createElement('img');
+//         if (student.Status === "paid") {
+//           img.src = "./imgs/download.png";
+//           img.alt = "paid";
+//           img.style.width = "7%";
+//         } else if (student.Status === "unpaid") {
+//           img.src = "./imgs/png-transparent-computer-icons-ok-miscellaneous-trademark-cross.png";
+//           img.alt = "unpaid";
+//           img.style.width = "7%";
+//         }
+//         StatusCell.appendChild(img);
+//       }
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 
 
@@ -173,8 +204,8 @@ async function showDeadlines(value) {
 
 
 searchButton.addEventListener('click', () => {
-  const value = searchInput[0].value;
-  showDeadlines(value);
+  const id = searchInput[0].value;
+  displayDeadCard(id);
 });
 
 

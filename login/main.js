@@ -72,11 +72,11 @@
 
 const spinnerLog = document.querySelector('#spinnerLog')
 function show() {
-  spinnerLog.style.display = "block";
+    spinnerLog.style.display = "block";
 }
 
 function hide() {
-  spinnerLog.style.display = "none";
+    spinnerLog.style.display = "none";
 }
 
 
@@ -95,7 +95,7 @@ async function getdata() {
 }
 
 myButton.addEventListener('click', async () => {
-  show()
+    show()
     var users = await getdata();
 
 
@@ -105,27 +105,27 @@ myButton.addEventListener('click', async () => {
         if (username.value === user.Username && password.value == user.Password) {
             // alert('Done!');
             const emp = {
-                username : user.Username,
-                password : user.Password,
-                role : user.Role
+                username: user.Username,
+                password: user.Password,
+                role: user.Role
             }
             // console.log("test " + emp.username);
-            localStorage.setItem('myUser',emp.username)
-            localStorage.setItem('myUserRole',emp.role)
+            localStorage.setItem('myUser', emp.username)
+            localStorage.setItem('myUserRole', emp.role)
             correct = true;
             return;
         }
         count++;
         console.log(count);
-        
+
     }
     );
-    
+
 
     if (correct == true) {
         hide()
         window.location.href = "../SRM.html";
-        
+
     }
     else {
         hide()
@@ -140,7 +140,7 @@ myButton.addEventListener('click', async () => {
 //     // toggle the type attribute
 //     const type = password.getAttribute("type") === "password" ? "text" : "password";
 //     password.setAttribute("type", type);
-    
+
 //     // toggle the icon
 //     this.classList.toggle("bi-eye");
 // });
